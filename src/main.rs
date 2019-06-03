@@ -157,14 +157,15 @@ fn main() -> io::Result<()> {
         log.seek(SeekFrom::End(0))?;
 
         let mut print = |buf: &[u8]| {
-            print!("{}", unsafe { str::from_utf8_unchecked(buf) });
+            println!("{}", unsafe { str::from_utf8_unchecked(buf) });
             for port in &mut ports {
                 port.init();
                 port.write(buf);
+                port.write(b"\n");
             }
         };
 
-        print(b"Waiting for kernel messages...\n");
+        print(b"Waiting for kernel messages...");
 
         let mut buf = [0; 4096];
         loop {
